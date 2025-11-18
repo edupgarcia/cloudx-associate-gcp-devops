@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Task 2</title>
+</head>
+<body onload="getDbTime();">
+<h1>Database time</h1>
+<div id="dbtime"></div>
+<script language="javascript">
+function getDbTime() {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        document.getElementById("dbtime").innerHTML = this.responseText;
+      } else {
+        document.getElementById("dbtime").innerHTML = "AJAX error code: " + this.status;
+      }
+    }
+  };
+  xhr.open("GET", "/api/", true);
+  xhr.send();
+}
+</script>
+</body>
+</html>
