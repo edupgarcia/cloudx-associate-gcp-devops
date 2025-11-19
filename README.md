@@ -2,6 +2,8 @@
 
 This repository contain materials for [CloudX Associate GCP DevOps](https://learn.epam.com/detailsPage?id=0a22ca59-72da-4efd-9f34-8104a2a2c79b) program.
 
+It is a copy from the original repository (fork link broken)
+
 | Task                                                              | Solution                            |
 | ----------------------------------------------------------------- | ----------------------------------- |
 | [Basic Network](tasks/basic-network.md)                           | [Scripts](solutions/basic-network/) |
