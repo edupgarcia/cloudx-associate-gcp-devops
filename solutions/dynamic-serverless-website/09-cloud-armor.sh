@@ -14,6 +14,7 @@ gcloud compute security-policies rules create 1000 \
 # Default rule to deny all other traffic
 gcloud compute security-policies rules create 2147483647 \
     --security-policy=$SECURITY_POLICY \
+    --src-ip-ranges='*' \
     --action=deny-403 \
     --description="Default deny rule"
 

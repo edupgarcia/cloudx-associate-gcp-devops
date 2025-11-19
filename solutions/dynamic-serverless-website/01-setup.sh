@@ -90,6 +90,12 @@ echo 'Enabling cloud build API...'
 gcloud services enable cloudbuild.googleapis.com
 echo 'Cloud build API enabled.'
 
+# Enable run API
+echo ''
+echo 'Enabling run API...'
+gcloud services enable run.googleapis.com
+echo 'Run API enabled.'
+
 # Checking variables
 echo ''
 echo 'Checking variables...'

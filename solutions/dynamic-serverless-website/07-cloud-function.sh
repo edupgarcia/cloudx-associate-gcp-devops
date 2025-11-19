@@ -14,7 +14,7 @@ gcloud functions deploy $FUNCTION_NAME \
     --allow-unauthenticated \
     --vpc-connector=$CONNECTOR_NAME \
     --egress-settings=private-ranges-only \
-    --set-env-vars=DB_CREDS="$SECRET_VALUE"
+    --set-secrets=DB_CREDS=$SECRET_NAME:latest
 
 # Get the function URL
 FUNCTION_URL=$(gcloud functions describe $FUNCTION_NAME \
