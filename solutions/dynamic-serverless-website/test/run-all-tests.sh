@@ -47,12 +47,12 @@ run_test() {
 }
 
 # Run all tests in order
-run_test "./1-test-homepage.sh"
-run_test "./2-test-404.sh"
-run_test "./3-test-sql-private-ip.sh"
-run_test "./4-test-secret-manager.sh"
-run_test "./5-test-api-endpoint.sh"
-run_test "./6-test-cloud-armor.sh"
+run_test "./01-test-homepage.sh"
+run_test "./02-test-404.sh"
+run_test "./03-test-sql-private-ip.sh"
+run_test "./04-test-secret-manager.sh"
+run_test "./05-test-api-endpoint.sh"
+run_test "./06-test-cloud-armor.sh"
 
 # Print summary
 echo ""
