@@ -8,7 +8,7 @@ export NETWORK_NAME="custom-vpc"
 export SUBNET_NAME="private-subnet"
 export SUBNET_RANGE="10.0.0.0/24"
 # curl ifconfig.me
-export EXTERNAL_IP="35.241.194.112/32"
+export EXTERNAL_IP="$(curl -s ifconfig.me)/32"
 
 # Set your project ID
 gcloud config set project $PROJECT_ID

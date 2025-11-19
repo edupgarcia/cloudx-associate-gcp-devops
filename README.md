@@ -4,9 +4,9 @@ This repository contain materials for [CloudX Associate GCP DevOps](https://lear
 
 It is a copy from the original repository (fork link broken)
 
-| Task                                                              | Solution                            |
-| ----------------------------------------------------------------- | ----------------------------------- |
-| [Basic Network](tasks/basic-network.md)                           | [Scripts](solutions/basic-network/) |
-| [Dynamic Serverless Website](tasks/dynamic-serverless-website.md) |                                     |
-| [Bulk Processing](tasks/bulk-processing.md)                       |                                     |
-| [Nextcloud on GCE](tasks/nextcloud-gce.md)                        |                                     |
+| Task                                                              | Solution                                        |
+| ----------------------------------------------------------------- | ----------------------------------------------- |
+| [Basic Network](tasks/basic-network.md)                           | [Scripts](solutions/basic-network/)             |
+| [Dynamic Serverless Website](tasks/dynamic-serverless-website.md) | [Scripts](solutions/dynamic-serverless-website) |
+| [Bulk Processing](tasks/bulk-processing.md)                       |                                                 |
+| [Nextcloud on GCE](tasks/nextcloud-gce.md)                        |                                                 |
