@@ -47,8 +47,8 @@ run_test() {
 }
 
 # Run all tests in order
-run_test "./1-test-pipeline.sh"
-run_test "./2-test-autoscaling.sh"
+run_test "./01-test-pipeline.sh"
+run_test "./02-test-autoscaling.sh"
 
 # Print summary
 echo ""
