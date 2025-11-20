@@ -4,14 +4,13 @@ set -e
 LB_IP=$(gcloud compute addresses describe $IP_NAME --global --format="value(address)")
 
 echo "Creating uptime check..."
-gcloud monitoring uptime create $UPTIME_CHECK_NAME \
+gcloud monitoring uptime create "Nextcloud Uptime Check" \
     --resource-type=uptime-url \
-    --host="$LB_IP" \
+    --resource-labels=host="$LB_IP",project_id="$GOOGLE_CLOUD_PROJECT" \
     --path="/" \
     --port=80 \
-    --check-interval=60s \
-    --timeout=10s \
-    --display-name="Nextcloud Uptime Check"
+    --period=1 \
+    --timeout=10
 
 echo "Waiting for uptime check to be created..."
 sleep 10
