@@ -24,10 +24,21 @@ cd test
 Execute specific tests:
 ```bash
 # Test 1: End-to-end pipeline functionality
-./1-test-pipeline.sh
+./01-test-pipeline.sh
 
 # Test 2: Autoscaling configuration
-./2-test-autoscaling.sh
+./02-test-autoscaling.sh
+
+# Test 3: MIG configuration
+./03-test-mig-configuration.sh
+```
+
+### Run Unit Tests
+
+Run Python unit tests for MIG validation:
+```bash
+cd test
+python3 test_mig_validation.py -v
 ```
 
 ## Test Coverage
@@ -53,6 +64,28 @@ Verifies:
 - Current instance counts
 - Pub/Sub subscription message counts
 - Lists all running worker instances
+
+### Test 3: MIG Configuration
+**Acceptance Criterion**: MIGs are created with correct base instance names and zones.
+
+Verifies:
+- Unpack MIG has correct base instance name (`unpack-worker`)
+- Transform MIG has correct base instance name (`transform-worker`)
+- Unpack MIG is in the correct zone
+- Transform MIG is in the correct zone
+
+### Unit Tests: MIG Validation
+Python unit tests that mock GCP API calls to validate MIG configuration logic.
+
+Tests include:
+1. **Unpack MIG base instance name validation** - Valid and invalid cases
+2. **Transform MIG base instance name validation** - Valid and invalid cases
+3. **Unpack MIG zone validation** - Valid and invalid cases
+4. **Transform MIG zone validation** - Valid and invalid cases
+5. **Error handling** - Non-existent MIG handling
+6. **Helper functions** - Zone extraction and name format validation
+
+Run with: `python3 test_mig_validation.py -v`
 
 ## Manual Testing
 
