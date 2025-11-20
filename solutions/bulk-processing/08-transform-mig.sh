@@ -62,9 +62,10 @@ echo "✓ Created instance template: $TRANSFORM_TEMPLATE"
 
 # Create managed instance group
 gcloud compute instance-groups managed create $TRANSFORM_MIG \
+    --zone=$ZONE \
     --template=$TRANSFORM_TEMPLATE \
-    --size=$MIN_INSTANCES \
-    --zone=$ZONE
+    --base-instance-name=transform-worker \
+    --size=$MIN_INSTANCES
 
 echo "✓ Created managed instance group: $TRANSFORM_MIG"
 

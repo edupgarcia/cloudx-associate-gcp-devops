@@ -62,9 +62,10 @@ echo "✓ Created instance template: $UNPACK_TEMPLATE"
 
 # Create managed instance group
 gcloud compute instance-groups managed create $UNPACK_MIG \
+    --zone=$ZONE \
     --template=$UNPACK_TEMPLATE \
-    --size=$MIN_INSTANCES \
-    --zone=$ZONE
+    --base-instance-name=unpack-worker \
+    --size=$MIN_INSTANCES
 
 echo "✓ Created managed instance group: $UNPACK_MIG"
 
