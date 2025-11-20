@@ -4,11 +4,12 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Repository Overview
 
-This is a learning repository for CloudX Associate GCP DevOps program containing three main infrastructure solutions deployed on Google Cloud Platform:
+This is a learning repository for CloudX Associate GCP DevOps program containing four main infrastructure solutions deployed on Google Cloud Platform:
 
 1. **Basic Network**: VPC networking with bastion host, Cloud NAT, and Private Google Access
 2. **Dynamic Serverless Website**: Serverless architecture with Cloud Functions, Cloud SQL, and Load Balancer
 3. **Bulk Processing**: Event-driven data pipeline with Pub/Sub, Cloud Storage, and autoscaling Managed Instance Groups
+4. **Nextcloud GCE**: Nextcloud deployment on Compute Engine with Cloud SQL, Memorystore Redis, Filestore, and uptime monitoring
 
 Each solution is structured with:
 - Numbered deployment scripts (01-setup.sh, 02-*.sh, etc.) that must be run in sequence
@@ -37,6 +38,41 @@ export EXTERNAL_IP="$(curl -s ifconfig.me)/32"
 - Is automatically added to `.gitignore` to prevent accidental commits
 
 ## Common Commands
+
+### Nextcloud GCE Solution
+
+```bash
+# Deploy (from solutions/nextcloud-gce/)
+source 01-setup.sh
+./02-vpc.sh
+./03-vpc-connector.sh
+./04-sql.sh  # Takes ~10 minutes
+./05-filestore.sh  # Takes ~5 minutes
+./06-redis.sh  # Takes ~5 minutes
+./07-secret-manager.sh
+./08-instance-template.sh
+./09-instance-group.sh
+./10-load-balancer.sh
+./11-nextcloud-setup.sh
+./12-cloud-scheduler.sh
+./13-monitoring.sh
+
+# Test
+cd test
+python3 test_uptime_check.py -v  # Run unit tests for uptime check configuration
+
+# Verify deployment
+LB_IP=$(gcloud compute addresses describe $IP_NAME --global --format="value(address)")
+curl -I http://$LB_IP/
+
+# Check uptime monitoring
+gcloud monitoring uptime list --format="table(displayName,monitoredResource.labels.host)"
+gcloud monitoring uptime describe "Nextcloud Uptime Check" --format=json
+
+# Cleanup
+source 01-setup.sh
+./99-project-cleanup.sh
+```
 
 ### Bulk Processing Solution
 
@@ -159,10 +195,21 @@ Scripts use numbered prefixes to indicate execution order. Always run in sequenc
 
 Each solution has a `test/` directory with:
 - Automated test scripts matching acceptance criteria
-- `run-all-tests.sh` for running complete test suite
+- `run-all-tests.sh` for running complete test suite (where applicable)
+- Python unit tests using `unittest` and mocked GCP API calls
 - README.md documenting test procedures
 
 Tests assume deployment scripts have been run and environment variables are loaded.
+
+**Unit Testing Pattern**:
+- Tests use `unittest` framework with `@patch('subprocess.run')` to mock `gcloud` commands
+- Mock responses simulate GCP API JSON output
+- Tests validate configuration without requiring actual GCP resources
+- Run with: `python3 test_*.py -v`
+
+**Examples**:
+- `bulk-processing/test/test_mig_validation.py` - Validates MIG base instance names and zones
+- `nextcloud-gce/test/test_uptime_check.py` - Validates uptime check configuration (display name, host, project ID, period, path, port)
 
 ### Environment Variable Management
 
@@ -196,8 +243,11 @@ source 01-setup.sh
 - **API Enablement**: First-time setup enables required GCP APIs (can take 1-2 minutes)
 - **Long-Running Operations**: 
   - Cloud SQL creation: ~10 minutes
+  - Filestore creation: ~5 minutes
+  - Memorystore Redis creation: ~5 minutes
   - MIG creation with instance templates: 3-5 minutes
   - Autoscaling triggers: 5-10 minutes after first load
+  - Uptime check creation: ~10 seconds
 - **Default Region/Zone**: Solutions default to `us-central1`/`us-central1-a`
 
 ### Worker Instance Debugging
@@ -242,11 +292,20 @@ cloudx-associate-gcp-devops/
 ├── solutions/                    # Solution implementations
 │   ├── basic-network/
 │   ├── dynamic-serverless-website/
-│   └── bulk-processing/
+│   ├── bulk-processing/
+│   │   ├── 01-setup.sh          # Environment setup (source this)
+│   │   ├── 02-08-*.sh           # Sequential deployment scripts
+│   │   ├── 99-project-cleanup.sh # Resource cleanup
+│   │   └── test/                # Automated tests
+│   │       ├── test_mig_validation.py  # Unit tests
+│   │       └── README.md
+│   └── nextcloud-gce/
 │       ├── 01-setup.sh          # Environment setup (source this)
-│       ├── 02-08-*.sh           # Sequential deployment scripts
+│       ├── 02-13-*.sh           # Sequential deployment scripts
 │       ├── 99-project-cleanup.sh # Resource cleanup
 │       └── test/                # Automated tests
+│           ├── test_uptime_check.py    # Unit tests
+│           └── README.md
 └── README.md                    # Repository overview
 ```
 
