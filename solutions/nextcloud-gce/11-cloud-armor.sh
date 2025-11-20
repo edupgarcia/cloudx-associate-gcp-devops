@@ -20,10 +20,11 @@ gcloud compute security-policies rules create 1000 \
     --description="Allow access from known IP"
 
 echo "Adding default deny rule..."
-gcloud compute security-policies rules create 2147483647 \
+gcloud compute security-policies rules create 2147483646 \
     --security-policy=$SECURITY_POLICY_NAME \
     --action=deny-403 \
-    --description="Default deny all"
+    --description="Default deny all" \
+    --src-ip-ranges='*'
 
 echo "Attaching security policy to backend service..."
 gcloud compute backend-services update $BACKEND_SERVICE_NAME \

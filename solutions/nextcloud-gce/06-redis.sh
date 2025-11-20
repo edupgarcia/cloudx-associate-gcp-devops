@@ -7,12 +7,12 @@ gcloud redis instances create $REDIS_INSTANCE_NAME \
     --network=projects/$PROJECT_ID/global/networks/$NETWORK_NAME \
     --tier=standard \
     --size=1 \
-    --redis-version=redis_6_x \
-    --auth-enabled
+    --redis-version=redis_7_2 #\
+    # --auth-enabled
 
-echo "Setting Redis AUTH password..."
-gcloud redis instances update $REDIS_INSTANCE_NAME \
-    --region=$REGION \
-    --update-auth-string="$REDIS_AUTH"
+# echo "Setting Redis AUTH password..."
+# gcloud redis instances update $REDIS_INSTANCE_NAME \
+#     --region=$REGION \
+#     --update-auth-string="$REDIS_AUTH"
 
 echo "Memorystore Redis instance created successfully."

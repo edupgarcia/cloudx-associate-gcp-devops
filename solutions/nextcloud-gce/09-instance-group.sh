@@ -21,7 +21,7 @@ gcloud compute instance-groups managed create $INSTANCE_GROUP \
     --template=$INSTANCE_TEMPLATE \
     --size=$MIN_INSTANCES \
     --zones=$ZONE_A,$ZONE_B,$ZONE_C \
-    --instance-redistribution-type=PROACTIVE \
+    --instance-redistribution-type=NONE \
     --target-distribution-shape=BALANCED
 
 echo "Configuring autoscaling..."
