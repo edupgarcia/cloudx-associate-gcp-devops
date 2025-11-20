@@ -145,4 +145,64 @@ echo 'VPC Connector for Cloud Function'
 echo "CONNECTOR_NAME: ${CONNECTOR_NAME}"
 
 echo ''
-echo 'Setup complete. Update EXTERNAL_IP with your IP: export EXTERNAL_IP="$(curl -s ifconfig.me)/32"'
+echo 'Setup complete.'
+echo ''
+
+# Export all variables to .env file
+echo 'Saving environment variables to .env file...'
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cat > "${SCRIPT_DIR}/.env" <<ENV_EOF
+# Dynamic Serverless Website Configuration
+# Generated: $(date)
+
+# Project Configuration
+PROJECT_ID="${PROJECT_ID}"
+REGION="${REGION}"
+ZONE="${ZONE}"
+
+# Network Configuration
+NETWORK_NAME="${NETWORK_NAME}"
+SUBNET_NAME="${SUBNET_NAME}"
+SUBNET_RANGE="${SUBNET_RANGE}"
+
+# Cloud SQL Configuration
+DB_INSTANCE_NAME="${DB_INSTANCE_NAME}"
+DB_NAME="${DB_NAME}"
+DB_USER="${DB_USER}"
+DB_PASSWORD="${DB_PASSWORD}"
+
+# Cloud Function Configuration
+FUNCTION_NAME="${FUNCTION_NAME}"
+FUNCTION_ENTRY_POINT="${FUNCTION_ENTRY_POINT}"
+
+# Cloud Storage Configuration
+BUCKET_NAME="${BUCKET_NAME}"
+
+# Secret Manager Configuration
+SECRET_NAME="${SECRET_NAME}"
+
+# Security Configuration
+EXTERNAL_IP="${EXTERNAL_IP}"
+
+# Load Balancer Configuration
+LB_NAME="${LB_NAME}"
+BACKEND_BUCKET_NAME="${BACKEND_BUCKET_NAME}"
+NEG_NAME="${NEG_NAME}"
+BACKEND_SERVICE_FUNCTION="${BACKEND_SERVICE_FUNCTION}"
+BACKEND_SERVICE_BUCKET="${BACKEND_SERVICE_BUCKET}"
+URL_MAP_NAME="${URL_MAP_NAME}"
+TARGET_HTTP_PROXY_NAME="${TARGET_HTTP_PROXY_NAME}"
+FORWARDING_RULE_NAME="${FORWARDING_RULE_NAME}"
+IP_NAME="${IP_NAME}"
+SECURITY_POLICY="${SECURITY_POLICY}"
+
+# VPC Connector for Cloud Function
+CONNECTOR_NAME="${CONNECTOR_NAME}"
+ENV_EOF
+
+echo "Environment variables saved to ${SCRIPT_DIR}/.env"
+echo ''
+echo 'IMPORTANT: Database password has been generated and saved to .env file.'
+echo 'Keep this file secure and do not commit it to version control!'
+echo ''
+echo 'Update EXTERNAL_IP with your IP: export EXTERNAL_IP="$(curl -s ifconfig.me)/32"'

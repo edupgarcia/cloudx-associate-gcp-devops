@@ -82,4 +82,55 @@ echo 'Managed Instance Groups:'
 echo "  UNPACK_MIG: ${UNPACK_MIG}"
 echo "  TRANSFORM_MIG: ${TRANSFORM_MIG}"
 echo ''
+echo 'Autoscaling Configuration:'
+echo "  MIN_INSTANCES: ${MIN_INSTANCES}"
+echo "  MAX_INSTANCES: ${MAX_INSTANCES}"
+echo "  TARGET_QUEUE_DEPTH: ${TARGET_QUEUE_DEPTH}"
+echo ''
 echo 'Setup complete.'
+echo ''
+
+# Export all variables to .env file
+echo 'Saving environment variables to .env file...'
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cat > "${SCRIPT_DIR}/.env" <<ENV_EOF
+# Bulk Processing Configuration
+# Generated: $(date)
+
+# Project Configuration
+PROJECT_ID="${PROJECT_ID}"
+REGION="${REGION}"
+ZONE="${ZONE}"
+
+# Storage Bucket Configuration
+INGEST_BUCKET="${INGEST_BUCKET}"
+UNPACK_BUCKET="${UNPACK_BUCKET}"
+TRANSFORM_BUCKET="${TRANSFORM_BUCKET}"
+
+# Pub/Sub Configuration
+INGEST_TOPIC="${INGEST_TOPIC}"
+UNPACK_TOPIC="${UNPACK_TOPIC}"
+TRANSFORM_TOPIC="${TRANSFORM_TOPIC}"
+INGEST_SUBSCRIPTION="${INGEST_SUBSCRIPTION}"
+UNPACK_SUBSCRIPTION="${UNPACK_SUBSCRIPTION}"
+TRANSFORM_SUBSCRIPTION="${TRANSFORM_SUBSCRIPTION}"
+
+# Compute Engine Configuration
+MACHINE_TYPE="${MACHINE_TYPE}"
+IMAGE_FAMILY="${IMAGE_FAMILY}"
+IMAGE_PROJECT="${IMAGE_PROJECT}"
+
+# Instance Template and Managed Instance Group Configuration
+UNPACK_TEMPLATE="${UNPACK_TEMPLATE}"
+UNPACK_MIG="${UNPACK_MIG}"
+TRANSFORM_TEMPLATE="${TRANSFORM_TEMPLATE}"
+TRANSFORM_MIG="${TRANSFORM_MIG}"
+
+# Autoscaling Configuration
+MIN_INSTANCES=${MIN_INSTANCES}
+MAX_INSTANCES=${MAX_INSTANCES}
+TARGET_QUEUE_DEPTH=${TARGET_QUEUE_DEPTH}
+ENV_EOF
+
+echo "Environment variables saved to ${SCRIPT_DIR}/.env"
+echo ''

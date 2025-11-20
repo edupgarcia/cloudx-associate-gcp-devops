@@ -1,0 +1,21 @@
+# Environment variables with sensitive data
+.env
+
+# Terraform state files (if added later)
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Temporary files
+*.tmp
+/tmp/
+
+# Backup files
+*.bak
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
