@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 BUCKET="$1"
 TIMESTAMP="$(date +%s).$$"
