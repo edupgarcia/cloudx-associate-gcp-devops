@@ -3,57 +3,41 @@
 # 04-service-accounts.sh
 # Create GKE and Nextcloud service accounts and bind required IAM roles
 
-set -euo pipefail
+set -e
 
-if [[ -z "${PROJECT_ID:-}" ]]; then
-  echo "ERROR: PROJECT_ID is not set. Run: source 01-setup.sh" >&2
-  exit 1
-fi
+echo "Creating GKE service account ${GKE_SA_NAME}..."
+gcloud iam service-accounts create "${GKE_SA_NAME}" \
+  --project "${PROJECT_ID}" \
+  --display-name "${GKE_SA_NAME}"
 
-create_sa() {
-  local sa_name=$1
-  local sa_email=${sa_name}@${PROJECT_ID}.iam.gserviceaccount.com
-
-  if ! gcloud iam service-accounts describe "${sa_email}" --project "${PROJECT_ID}" >/dev/null 2>&1; then
-    echo "Creating service account ${sa_email}..."
-    gcloud iam service-accounts create "${sa_name}" \
-      --project "${PROJECT_ID}" \
-      --display-name "${sa_name}"
-  else
-    echo "Service account ${sa_email} already exists, skipping create."
-  fi
-}
-
-bind_project_role() {
-  local sa_email=$1
-  local role=$2
-  echo "Binding role ${role} to ${sa_email}..."
-  gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
-    --member "serviceAccount:${sa_email}" \
-    --role "${role}" \
-    --quiet >/dev/null
-}
-
-# GKE service account (kubernetes)
-create_sa "${GKE_SA_NAME}"
 GKE_SA_EMAIL="${GKE_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
-# Required roles for GKE SA
-bind_project_role "${GKE_SA_EMAIL}" "roles/artifactregistry.reader"
-bind_project_role "${GKE_SA_EMAIL}" "roles/logging.logWriter"
-bind_project_role "${GKE_SA_EMAIL}" "roles/monitoring.metricWriter"
-bind_project_role "${GKE_SA_EMAIL}" "roles/monitoring.viewer"
-bind_project_role "${GKE_SA_EMAIL}" "roles/stackdriver.resourceMetadata.writer"
-bind_project_role "${GKE_SA_EMAIL}" "roles/storage.objectViewer"
+echo "Binding IAM roles to ${GKE_SA_EMAIL}..."
+for ROLE in \
+  roles/artifactregistry.reader \
+  roles/logging.logWriter \
+  roles/monitoring.metricWriter \
+  roles/monitoring.viewer \
+  roles/stackdriver.resourceMetadata.writer \
+  roles/storage.objectViewer
+do
+  gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+    --member "serviceAccount:${GKE_SA_EMAIL}" \
+    --role "${ROLE}"
+done
 
-# Nextcloud service account (nextcloud)
-create_sa "${NEXTCLOUD_SA_NAME}"
+echo "Creating Nextcloud service account ${NEXTCLOUD_SA_NAME}..."
+gcloud iam service-accounts create "${NEXTCLOUD_SA_NAME}" \
+  --project "${PROJECT_ID}" \
+  --display-name "${NEXTCLOUD_SA_NAME}"
+
 NEXTCLOUD_SA_EMAIL="${NEXTCLOUD_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
-# Required roles for Nextcloud SA
-bind_project_role "${NEXTCLOUD_SA_EMAIL}" "roles/storage.objectAdmin"
+echo "Binding IAM roles to ${NEXTCLOUD_SA_EMAIL}..."
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --member "serviceAccount:${NEXTCLOUD_SA_EMAIL}" \
+  --role "roles/storage.objectAdmin"
 
-# Export resolved emails
 export GKE_SA_EMAIL
 export NEXTCLOUD_SA_EMAIL
 

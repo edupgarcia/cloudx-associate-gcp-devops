@@ -9,21 +9,16 @@ set -u
 # Project and region configuration
 # -----------------------------------------------------------------------------
 
-# GOOGLE_CLOUD_PROJECT is set automatically in Cloud Shell. Fall back to gcloud
+# GOOGLE_CLOUD_PROJECT is set automatically in Cloud Shell.
+# Match the pattern used in other solutions: derive PROJECT_ID from GOOGLE_CLOUD_PROJECT.
 if [[ -z "${GOOGLE_CLOUD_PROJECT:-}" ]]; then
-  PROJECT_ID="$(gcloud config get-value project 2>/dev/null)"
-else
-  PROJECT_ID="$GOOGLE_CLOUD_PROJECT"
-fi
-
-if [[ -z "${PROJECT_ID}" ]]; then
-  echo "ERROR: PROJECT_ID is not set and could not be inferred from gcloud config."
-  echo "Set GOOGLE_CLOUD_PROJECT or run: gcloud config set project <PROJECT_ID>"
+  echo "ERROR: GOOGLE_CLOUD_PROJECT is not set."
+  echo "In Cloud Shell this is set automatically. Otherwise run:"
+  echo "  gcloud config set project <PROJECT_ID>"
   return 1 2>/dev/null || exit 1
 fi
 
-export PROJECT_ID
-export GOOGLE_CLOUD_PROJECT="$PROJECT_ID"
+export PROJECT_ID="$GOOGLE_CLOUD_PROJECT"
 
 export REGION="us-central1"
 export ZONE_A="us-central1-a"
