@@ -4,12 +4,20 @@
 
 ![Architecture diagram](../images/final-task/architecture.png)
 
+  ```
+  Notes:
+  Project ID = `gcp-devops-final-task-africa`
+  Region = `africa-south1`
+  Zones = `africa-south1-a`, `africa-south1-b`
+  # us-central1 replaced by africa-south1 due to SSD storage quota limitation
+  ```
+
 ## Tasks
 
 1. **Create VPC with custom subnet**
    - Network name: `network`
-   - Subnet name: `us-central1-subnet`
-   - Region: `us-central1`
+   - Subnet name: `africa-south1-subnet`
+   - Region: `africa-south1` 
    - Subnet primary IP range: `10.1.0.0/24`
    - Subnet secondary ranges:
      - GKE pods secondary range:
@@ -27,14 +35,14 @@
 3. **Create NAT gateway for internet access**
    - Name: `nat-gateway`
    - VPC network: `network`
-   - Region: `us-central1`
+   - Region: `africa-south1`
    - Create new Cloud Router
    - NAT mapping:
      - Source: primary and secondary ranges for all subnets
      - NAT IP address: automatic
 
 4. **Create GKE service account**
-   - Name: `kubernetes`
+   - Name: `kubernetes` 
    - Roles:
      - Artifact Registry Reader
      - Logs Writer
@@ -43,15 +51,25 @@
      - Stackdriver Resource Metadata Writer
      - Storage Object Viewer
 
+   ```
+   Notes:
+   Email = kubernetes@gcp-devops-final-task.iam.gserviceaccount.com
+   ```
+
 5. **Create Nextcloud service account**
    - Name: `nextcloud`
    - Roles:
      - Storage Object Admin
 
+    ```
+    Notes:
+    Email = nextcloud@gcp-devops-final-task.iam.gserviceaccount.com
+    ```
+
 6. **Create standard GKE cluster with private nodes and public control plane**
    - Name: `cluster`
-   - Region: `us-central1`
-   - Zones: `us-central1-a`, `us-central1-b`
+   - Region: `africa-south1`
+   - Zones: `africa-south1-a`, `africa-south1-b`
    - Total number of nodes: 2
    - Node type: `n1-standard-1`
    - Service account: `kubernetes`
@@ -63,8 +81,8 @@
    - Name: `database`
    - Set a strong root password
    - MySQL version: `8.0.x`
-   - Region: `us-central1`
-   - Zones: `us-central1-a`, `us-central1-b`
+   - Region: `africa-south1`
+   - Zones: `africa-south1-a`, `africa-south1-b`
    - Type: Standard 1 vCPU, 3.75 GB
    - Storage:
      - Type: SSD
@@ -93,13 +111,13 @@
 9. **Create Memorystore Redis instance**
    - Name: `redis`
    - Enable high availability
-   - Region: `us-central1`
+   - Region: `africa-south1`
    - Version: `5.0`
    - Capacity: 1 GB
 
 10. **Create Cloud Storage bucket**
     - Name: `<project>-nextcloud-external-data` (replace `<project>` with your project ID)
-    - Location: `us-central1`
+    - Location: `africa-south1`
     - Enable fine-grained access control
 
 11. **Create HMAC key and secret for Nextcloud service account to use with Google Cloud Storage interoperability**
