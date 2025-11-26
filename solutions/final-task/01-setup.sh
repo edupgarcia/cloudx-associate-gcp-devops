@@ -33,16 +33,16 @@ export EXTERNAL_IP="$(curl -s ifconfig.me)/32"
 # VPC & subnet configuration (Task 1)
 # -----------------------------------------------------------------------------
 
-export NETWORK_NAME="network"
-export SUBNET_NAME="us-central1-subnet"
+export NETWORK_NAME="gcp-devops-network"
+export SUBNET_NAME="gcp-devops-us-central1-subnet"
 export SUBNET_REGION="$REGION"
 export SUBNET_PRIMARY_RANGE="10.1.0.0/24"
 
 # GKE secondary IP ranges
-export PODS_RANGE_NAME="pods"
+export PODS_RANGE_NAME="gcp-devops-pods"
 export PODS_RANGE_CIDR="10.2.0.0/20"
 
-export SERVICES_RANGE_NAME="services"
+export SERVICES_RANGE_NAME="gcp-devops-services"
 export SERVICES_RANGE_CIDR="10.3.0.0/20"
 
 # Enable Private Google Access on subnet
@@ -52,16 +52,16 @@ export ENABLE_PRIVATE_GOOGLE_ACCESS="true"
 # Private Service Connect range (Task 2)
 # -----------------------------------------------------------------------------
 
-export PRIVATE_SERVICE_CONNECT_RANGE_NAME="private-services"
+export PRIVATE_SERVICE_CONNECT_RANGE_NAME="gcp-devops-private-services"
 export PRIVATE_SERVICE_CONNECT_RANGE_CIDR="10.4.0.0/20"
 
 # -----------------------------------------------------------------------------
 # Cloud NAT (Task 3)
 # -----------------------------------------------------------------------------
 
-export NAT_NAME="nat-gateway"
+export NAT_NAME="gcp-devops-nat-gateway"
 export NAT_REGION="$REGION"
-export CLOUD_ROUTER_NAME="nat-router"
+export CLOUD_ROUTER_NAME="gcp-devops-nat-router"
 
 # NAT should cover primary + secondary ranges for all subnets
 export NAT_SOURCE_SUBNETWORK_IP_RANGES="ALL_SUBNETWORKS_ALL_IP_RANGES"
@@ -70,7 +70,7 @@ export NAT_SOURCE_SUBNETWORK_IP_RANGES="ALL_SUBNETWORKS_ALL_IP_RANGES"
 # Service accounts (Tasks 4 & 5)
 # -----------------------------------------------------------------------------
 
-export GKE_SA_NAME="kubernetes"
+export GKE_SA_NAME="gcp-devops-kubernetes"
 export GKE_SA_EMAIL="${GKE_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
 export NEXTCLOUD_SA_NAME="nextcloud"
@@ -80,7 +80,7 @@ export NEXTCLOUD_SA_EMAIL="${NEXTCLOUD_SA_NAME}@${PROJECT_ID}.iam.gserviceaccoun
 # GKE cluster (Task 6)
 # -----------------------------------------------------------------------------
 
-export GKE_CLUSTER_NAME="cluster"
+export GKE_CLUSTER_NAME="gcp-devops-cluster"
 export GKE_CLUSTER_LOCATION="$REGION"      # regional cluster
 export GKE_CLUSTER_ZONES="${ZONE_A},${ZONE_B}"
 export GKE_NODE_COUNT="2"
@@ -97,7 +97,7 @@ export GKE_SERVICES_RANGE_NAME="$SERVICES_RANGE_NAME"
 # Cloud SQL MySQL (Tasks 7 & 8)
 # -----------------------------------------------------------------------------
 
-export SQL_INSTANCE_NAME="database"
+export SQL_INSTANCE_NAME="gcp-devops-database"
 export SQL_DATABASE_VERSION="MYSQL_8_0"
 export SQL_REGION="$REGION"
 export SQL_PRIMARY_ZONE="$ZONE_A"
@@ -133,7 +133,7 @@ export APP_DB_PASSWORD="$(openssl rand -base64 18)"
 # Memorystore Redis (Task 9)
 # -----------------------------------------------------------------------------
 
-export REDIS_INSTANCE_NAME="redis"
+export REDIS_INSTANCE_NAME="gcp-devops-redis"
 export REDIS_REGION="$REGION"
 export REDIS_TIER="STANDARD_HA"
 export REDIS_MEMORY_SIZE_GB="1"
@@ -209,6 +209,9 @@ gcloud services enable artifactregistry.googleapis.com
 
 echo "Enabling Cloud Resource Manager API..."
 gcloud services enable cloudresourcemanager.googleapis.com
+
+echo "Enabling Secret Manager API..."
+gcloud services enable secretmanager.googleapis.com
 
 echo ""
 echo "All APIs enabled successfully."
