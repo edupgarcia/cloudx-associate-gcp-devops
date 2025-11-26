@@ -20,11 +20,15 @@ gcloud compute networks subnets create "${SUBNET_NAME}" \
   --enable-private-ip-google-access
 
 echo "Allocating IP range ${PRIVATE_SERVICE_CONNECT_RANGE_NAME} for private services..."
+RANGE_BASE="${PRIVATE_SERVICE_CONNECT_RANGE_CIDR%/*}"
+RANGE_PREFIX="${PRIVATE_SERVICE_CONNECT_RANGE_CIDR#*/}"
+
 gcloud compute addresses create "${PRIVATE_SERVICE_CONNECT_RANGE_NAME}" \
   --project "${PROJECT_ID}" \
-  --region "${REGION}" \
+  --global \
   --purpose=VPC_PEERING \
-  --addresses="${PRIVATE_SERVICE_CONNECT_RANGE_CIDR}" \
+  --addresses="${RANGE_BASE}" \
+  --prefix-length="${RANGE_PREFIX}" \
   --network "${NETWORK_NAME}"
 
 echo "Network and IP ranges configured."

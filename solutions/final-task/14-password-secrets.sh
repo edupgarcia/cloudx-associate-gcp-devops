@@ -38,5 +38,5 @@ rm -f "${ROOT_FILE}" "${APP_FILE}" "${ADMIN_FILE}"
 
 echo "Secrets created:"
 echo "  gcp-devops-sql-root-password"
-att|echo "  gcp-devops-app-db-password"
+echo "  gcp-devops-app-db-password"
 echo "  gcp-devops-nextcloud-admin-password"
