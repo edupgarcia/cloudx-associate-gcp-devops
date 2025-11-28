@@ -98,6 +98,7 @@
             - In the Node Pools
                 - `default-pool` under User-managed node pool details, Number of nodes (per zone) was set to `1`
                     - `nodes` were set as above with disk usage to 30G to fit in the Free Trial
+                    - **Network tag `gke-cluster-node`**
             - Created a Network
                 - Added authorized Networks
                     - Name: `Network Control Plane`
@@ -218,8 +219,12 @@
     4. Push the Docker image to Google Cloud Registry (or Artifact Registry).
 
     - **Resolution Notes:**
-      - Create Artifact Registry
-        - Repository:`nextcloud-docker`
+      - Update HMAC Key and Secret to `values.yaml`
+      - Update redis server
+        - host as `redis`
+      - Update MySQL 
+        - host Internal IP `10.14.32.2`
+        - port `3306`
 
 13. **Deploy nginx-ingress chart from Bitnami**
     - Chart repo: [https://charts.bitnami.com/bitnami](https://charts.bitnami.com/bitnami).
@@ -227,11 +232,12 @@
     - Example commands:
 
          ```bash
-         helm repo add bitnami https://charts.bitnami.com/bitnamihelm install nginx-ingress bitnami/nginx-ingress-controller
+         helm repo add bitnami https://charts.bitnami.com/bitnami
+         helm install nginx-ingress bitnami/nginx-ingress-controller
          ```
 
 14. **Create Kubernetes secrets for admin and MySQL credentials**
-    - Follow instructions in [https://github.com/tataranovich/cloudx-l2-final-task/blob/master/README.md](https://github.com/tataranovich/cloudx-l2-final-task/blob/master/README.md).
+    - Follow instructions in [https://github.com/tataranovich/cloudx-l2-final-task/blob/master/README.md](https://github.com/tataranovich/cloudx-l2-final-task/blob/master/README.md)
 
 15. **Deploy Nextcloud Helm chart**
     - Chart repo: [https://nextcloud.github.io/helm/](https://nextcloud.github.io/helm/).
@@ -247,6 +253,26 @@
         ```text
         1.2.3.4 nextcloud.kube.home
         ```
+
+    - **Resolution Notes:**
+      - Add to `/etc/hosts`
+        - `34.9.243.133 nextcloud.kube.home`
+      - Add to `default-pool`
+        - Network tag `gke-cluster-node`
+      - Create firewall rules
+        - Name `nextcloud-allow-lb-http-https`
+        - Network `network`
+        - Priority `999`
+        - Direction of traffic
+          - `Ingress`
+        - Action on match
+          - Targets `Specified target tags`
+          - Target tags `gke-cluster-node`
+          - Source filter `IPv4 ranges`
+          - Source IPv4 ranges `0.0.0.0/0`
+        - Ports and Protocols
+          - Specified protocols and ports
+            - TCP `80,443`
 
 17. **Log in to Nextcloud**
     - Open [http://nextcloud.kube.home/login](http://nextcloud.kube.home/login).
