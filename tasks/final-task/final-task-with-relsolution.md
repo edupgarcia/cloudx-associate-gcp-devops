@@ -219,12 +219,14 @@
     4. Push the Docker image to Google Cloud Registry (or Artifact Registry).
 
     - **Resolution Notes:**
-      - Update HMAC Key and Secret to `values.yaml`
-      - Update redis server
-        - host as `redis`
-      - Update MySQL 
-        - host Internal IP `10.14.32.2`
-        - port `3306`
+      - Updates in `values.yaml`
+        - Change `ingress` by `ingressClassName`
+        - Update HMAC Key and Secret
+        - Update redis server
+            - host as `redis`
+        - Update MySQL
+            - host Internal IP `10.14.32.2`
+            - port `3306`
 
 13. **Deploy nginx-ingress chart from Bitnami**
     - Chart repo: [https://charts.bitnami.com/bitnami](https://charts.bitnami.com/bitnami).
@@ -259,8 +261,9 @@
         - `34.9.243.133 nextcloud.kube.home`
       - Add to firewall
         - `sudo ufw allow from 34.9.243.133`
-      - Fix the images paths for `nextcloud` and `nginx`
+      - Fix the images paths Legacy image for `nginx`
       - Add manifest file `nextcloud-ingress.yaml` for `nginx`
+      - History of commands executed to fix issues are saved at [Executed Commands Shell Script](./executed_commands.sh)
 
 17. **Log in to Nextcloud**
     - Open [http://nextcloud.kube.home/login](http://nextcloud.kube.home/login).
