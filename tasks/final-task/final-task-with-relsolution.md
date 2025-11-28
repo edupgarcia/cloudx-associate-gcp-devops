@@ -257,22 +257,10 @@
     - **Resolution Notes:**
       - Add to `/etc/hosts`
         - `34.9.243.133 nextcloud.kube.home`
-      - Add to `default-pool`
-        - Network tag `gke-cluster-node`
-      - Create firewall rules
-        - Name `nextcloud-allow-lb-http-https`
-        - Network `network`
-        - Priority `999`
-        - Direction of traffic
-          - `Ingress`
-        - Action on match
-          - Targets `Specified target tags`
-          - Target tags `gke-cluster-node`
-          - Source filter `IPv4 ranges`
-          - Source IPv4 ranges `0.0.0.0/0`
-        - Ports and Protocols
-          - Specified protocols and ports
-            - TCP `80,443`
+      - Add to firewall
+        - `sudo ufw allow from 34.9.243.133`
+      - Fix the images paths for `nextcloud` and `nginx`
+      - Add manifest file `nextcloud-ingress.yaml` for `nginx`
 
 17. **Log in to Nextcloud**
     - Open [http://nextcloud.kube.home/login](http://nextcloud.kube.home/login).
